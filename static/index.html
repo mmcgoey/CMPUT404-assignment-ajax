@@ -121,10 +121,13 @@ function drawNextFrame() {
 // This optionally draws the frame, call this if you're not sure if you should update
 // the canvas
 function drawFrame() {
+    
     if (drawNext) {
         renderFrame();
         drawNext = false;
     }
+    
+   renderFrame()
 }
 
 // This is unpleasent, canvas clicks are not handled well
@@ -149,49 +152,16 @@ function getPosition(e) {
 
 function addEntity(entity, data) {
     world[entity] = data;
-    console.log(data)
-    
-   // drawNextFrame(); // (but should we?)
-    /*
-    function callback(json_data){
-        return json_data
-
-    }
-    sendJSONXMLHTTPRequest("http://127.0.0.1:5001/entity/"+entity, entity[data],callback);
-    */
     var xhr = new XMLHttpRequest();
-    console.log("http://127.0.0.1:5001/entity/"+entity);
-    console.log(typeof JSON.stringify([entity]))
     
     xhr.open('POST',"/entity/"+entity,true);
+    
     //xhr.open('POST',"/world",true);
     xhr.setRequestHeader("Accept", "application/json");
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader("Access-Control-Allow-Origin","http://127.0.0.1:5001");
     xhr.send(JSON.stringify(world[entity]))
-
-
-
-
-
-    /*
-    function alertContents() {
-        if (xhr.readyState==4) {
-            try {
-                if (xhr.status==200) {
-                    //XXX: parse some JSON from the request!
-                    var json_data = JSON.parse(xhr.responseText);
-                    alert(json_data);
-                    //XXX: Pass the data to the callback!
-                    
-                }
-            } 
-            catch(e) {
-                alert('Error: ' + e.name);
-            }
-        }
-    };
-    */
+    //drawNextFrame();
     
     //XXX: Send a XHTML Request that updates the entity you just  modified!
 
@@ -320,7 +290,8 @@ function update() {
     //XXX: TODO Get the world from the webservice using a XMLHTTPRequest
     
 
-    //console.log("is update called?");
+    
+    
     var xhr = new XMLHttpRequest();
     xhr.open("GET","http://127.0.0.1:5001/world",true);
     
@@ -328,10 +299,9 @@ function update() {
         if (xhr.readyState==4) {
             try {
                 if (xhr.status==200) {
-                    //XXX: parse some JSON from the request!
                     var json_data = JSON.parse(xhr.responseText);
                     draw_stuff(json_data)
-                    //XXX: Pass the data to the callback!
+                    
                    
                 }
             } 
@@ -341,15 +311,14 @@ function update() {
         } 
     }
     
-    //xhr.send()
+    xhr.send()
    // clearFrame();
     
     
     function draw_stuff(json_data){
-        //xhr.send(json_data)
         
+        clearFrame();
         for (var key in json_data) {
-            console.log("What is key?",json_data[key])
             var entity = json_data[key];
             drawCircle(context,prepEntity(entity));
         }
@@ -357,8 +326,13 @@ function update() {
        
     }
     
-    xhr.send()
-    //drawFrame();
+    
+    
+   //drawNextFrame()
+
+   //drawFrame()
+   
+   
     
 }
 
