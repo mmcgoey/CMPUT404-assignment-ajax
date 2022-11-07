@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-# Copyright 2013 Abram Hindle
+# Copyright 2022 Abram Hindle and Mark McGoey
 # 
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -75,34 +75,22 @@ def flask_post_json():
 @app.route("/")
 def hello():
     '''Return something coherent here.. perhaps redirect to /static/index.html '''
-    return redirect("http://127.0.0.1:5001/static/index.html")
+    return redirect("http://127.0.0.1:5000/static/index.html")
 
 
 @app.route("/entity/<entity>", methods=['POST','PUT'])
 def update(entity):
     
     data = request.get_json()
-    
-    if request.method == 'POST':
-        myWorld.set(entity=entity,data=data)
-    elif request.method == 'PUT':
-        for key in data:
-            myWorld.update(entity=entity,key=key,value=data[key])
-    return myWorld.get(entity=entity)
-    
-
-    '''    
+        
     if myWorld.get(entity=entity):
-        print("is update called?")
         for key in data:
             myWorld.update(entity=entity,key=key,value=data[key])
     else:
-        print("Is post called?")
         myWorld.set(entity=entity,data=data)
     return myWorld.get(entity=entity)
-    '''
-    #myWorld.set(entity=entity,data=data)
-    #return myWorld.get(entity=entity)
+    
+    
 
     
 
@@ -125,4 +113,4 @@ def clear():
     return myWorld.world()
 
 if __name__ == "__main__":
-    app.run(port=5001)
+    app.run()
